@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgba(0,0,0,0);
+}
+
+/*antd-mobile样式覆盖*/
+:root:root { 
+    --adm-center-popup-border-radius: 4px;
+    --adm-center-popup-min-width: calc(100% - 66px);
+    --adm-center-popup-max-width: calc(100% - 66px);
+}
+.adm-badge-wrapper {
+  height: 32px;
+}
+.adm-tab-bar-wrap {
+  background: #fff;
+}
+:root:root {
+  --adm-color-primary: #476ff2;
+}
+.adm-tab-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+.adm-tab-bar-icon-badge {
+  --top: 6px !important;
+}
+:root .adm-empty-description {
+  color: #008FFF;
+  font-size: 16px;
+  margin-top: 14px;
+}
+.hide-scrollbar {
+  overflow-y: auto;
+}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
