@@ -2,14 +2,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import userInfo from './userInfoSlice';
-import unReadMsgNums from './messageInfoSlice';
+import msgInfo from './messageInfoSlice';
 import scheduleInfo from './scheduleSlice';
 
 export function makeStore() {
   return configureStore({
     reducer: {
       userInfo,
-      unReadMsgNums,
+      msgInfo,
       scheduleInfo,
     },
   })

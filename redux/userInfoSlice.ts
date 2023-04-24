@@ -4,6 +4,7 @@ import apis from '@/utils/apis';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import _ from 'lodash';
+import { RootState } from './store';
 
 type UserInfo = {
     tabs: MenuItem[],
@@ -30,8 +31,10 @@ const { ScheduleImg, Schedule2Img, StatisticsImg, Statistics2Img, SubscribeImg, 
     Police2Img: '/imgs/tabs/icon-警力分析-选中@2x.png'
 }
 
-/* 获取用户信息及其订阅配置 */
-export const getUserInfo = createAsyncThunk('userInfo/fetch', async (p, { dispatch }) => {
+/* 获取用户信息及其订阅配置及菜单权限 */
+export const getUserInfo = createAsyncThunk('userInfo/fetch', async (p, { getState, dispatch }) => {
+    const appState = getState() as RootState;
+    const curTabs = tabsSelector(appState);
     const idCard = localStorage.getItem('UserId');
     const response = await
         Promise.all([
@@ -59,73 +62,44 @@ export const getUserInfo = createAsyncThunk('userInfo/fetch', async (p, { dispat
             return rsp;
         });
     const info = { ...response[0], ...response[1], ...response[2] };
-    const notReadList = JSON.parse(localStorage.getItem('notReadMsgList') || '[]');
-    const notReadNum = notReadList.length || null;
+    const tabs = [
+        {
+            key: '/schedule',
+            title: '排班',
+            icon: ScheduleImg,
+            icon2: Schedule2Img
+        },
+        {
+            key: '/statistics',
+            title: '统计',
+            icon: StatisticsImg,
+            icon2: Statistics2Img
+        },
+        {
+            key: '/police',
+            title: '警力',
+            icon: PoliceImg,
+            icon2: Police2Img
+        },
+        {
+            key: '/subscribe',
+            title: '订阅',
+            icon: SubscribeImg,
+            icon2: Subscribe2Img
+        },
+        {
+            key: '/message',
+            title: '消息',
+            icon: MessageImg,
+            icon2: Message2Img,
+            badge: curTabs.length === 0 ? null : curTabs[curTabs.length - 1].badge
+        },
+    ];
     if (info.policeForceManage === 1) {
-        dispatch(
-            setTabs([
-                {
-                    key: '/schedule',
-                    title: '排班',
-                    icon: ScheduleImg,
-                    icon2: Schedule2Img
-                },
-                {
-                    key: '/statistics',
-                    title: '统计',
-                    icon: StatisticsImg,
-                    icon2: Statistics2Img
-                },
-                {
-                    key: '/police',
-                    title: '警力',
-                    icon: PoliceImg,
-                    icon2: Police2Img
-                },
-                {
-                    key: '/subscribe',
-                    title: '订阅',
-                    icon: SubscribeImg,
-                    icon2: Subscribe2Img
-                },
-                {
-                    key: '/message',
-                    title: '消息',
-                    icon: MessageImg,
-                    icon2: Message2Img,
-                    badge: notReadNum > 99 ? '99+' : notReadNum
-                },
-            ])
-        )
+        dispatch(setTabs(tabs))
     } else {
-        dispatch(
-            setTabs([
-                {
-                    key: '/schedule',
-                    title: '排班',
-                    icon: ScheduleImg,
-                    icon2: Schedule2Img
-                },
-                {
-                    key: '/statistics',
-                    title: '统计',
-                    icon: StatisticsImg,
-                    icon2: Statistics2Img
-                },
-                {
-                    key: '/subscribe',
-                    title: '订阅',
-                    icon: SubscribeImg,
-                    icon2: Subscribe2Img
-                },
-                {
-                    key: '/message',
-                    title: '消息',
-                    icon: MessageImg,
-                    icon2: Message2Img,
-                },
-            ])
-        )
+        tabs.splice(2, 1);
+        dispatch(setTabs(tabs))
     }
     return info;
 });
