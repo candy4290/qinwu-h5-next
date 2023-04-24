@@ -11,11 +11,9 @@ type ScheduleInfo = {
     data: {
         [key: string]: any
     } | null,
-    errMsg: string | null,
     isLoading: boolean,
 }
 const initData: ScheduleInfo = {
-    errMsg: null,
     isLoading: false,
     data: null
 }

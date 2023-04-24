@@ -20,13 +20,11 @@ function formatDate3(date: string) {
     );
 }
 type MsgInfo = {
-    errMsg: string | null,
     isLoading: boolean,
     unReadMsgNums: any,
     msgList: any[]
 }
 const initInfo: MsgInfo = {
-    errMsg: null,
     isLoading: false,
     unReadMsgNums: 0,
     msgList: []

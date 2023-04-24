@@ -4,6 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import userInfo from './userInfoSlice';
 import msgInfo from './messageInfoSlice';
 import scheduleInfo from './scheduleSlice';
+import subscribeInfo from './subscribeSlice';
 
 export function makeStore() {
   return configureStore({
@@ -11,6 +12,7 @@ export function makeStore() {
       userInfo,
       msgInfo,
       scheduleInfo,
+      subscribeInfo
     },
   })
 }

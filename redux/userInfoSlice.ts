@@ -9,13 +9,11 @@ import { RootState } from './store';
 type UserInfo = {
     tabs: MenuItem[],
     data: PoliceInfoType | null,
-    errMsg: string | null,
     isLoading: boolean,
 }
 const initInfo: UserInfo = {
     tabs: [],
     data: null,
-    errMsg: null,
     isLoading: false,
 };
 const { ScheduleImg, Schedule2Img, StatisticsImg, Statistics2Img, SubscribeImg, Subscribe2Img, MessageImg, Message2Img, PoliceImg, Police2Img } = {
@@ -122,7 +120,7 @@ export const getUserInfoSlice = createSlice({
     },
     reducers: {
         setTabs(state, { payload }: PayloadAction<MenuItem[]>) {
-            return { ...state, tabs: payload }
+            state.tabs = payload
         },
         clearMessageTab(state) {
             const temp = _.cloneDeep(state.tabs);
@@ -131,7 +129,7 @@ export const getUserInfoSlice = createSlice({
                     i.badge = null;
                 }
             });
-            return { ...state, tabs: temp }
+            state.tabs = temp;
         },
     }
 });
