@@ -26,3 +26,10 @@ export interface LockType {
     icon2: string; 
     badge?: any;
   }
+
+  export interface CurrentOrgInterface {
+    orgName: string,
+    orgCode: string,
+    orgAttr: PoliceInfoType['manageUnitOrgAttr'],
+    isZongLan?: boolean; /* 下属单位总览页 */
+} 

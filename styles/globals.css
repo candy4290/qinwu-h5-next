@@ -55,3 +55,39 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }
+:root .adm-tabs-tab {
+    font-size: 18px;
+    line-height: 25px;
+    color: rgba(#333, .6);
+}
+:root .adm-tabs-tab-active {
+    color: #008FFF;
+    text-shadow: 0px 5px 11px rgba(0,143,255,0.3020);
+    font-weight: 600;
+}
+:root .adm-tabs-tab-line {
+  display: none;
+}
+:root .adm-tabs-header {
+  border-bottom-width: 0;
+}
+:root .adm-tabs-header-mask-left, .adm-tabs-header-mask-right {
+  display: none;
+}
+:root .adm-tabs-tab-wrapper {
+    padding: 0 20px;
+  }
+:root .adm-tabs-content {
+    padding: 0;
+  }
+:root .adm-tabs-tab-list {
+    padding: 0 20px;
+  }
+:root .adm-empty-description {
+    color: #008FFF;
+    font-size: 16px;
+    margin-top: 14px;
+  }
+.org-empty .adm-empty-description {
+    margin-top: 8px;
+}
