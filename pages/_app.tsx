@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const mainPage = pathname?.startsWith('/home/');
   return (
     <Provider store={store}>
-      <div className={mainPage ? 'h-[calc(100vh-56px)] bg-[#f9f9f9]' : 'h-screen'}>
+      <div className={mainPage ? 'h-[calc(100vh-56px)] bg-[#f9f9f9] overflow-y-auto' : 'h-screen'}>
         <Component {...pageProps} />
       </div>
       {

@@ -10,8 +10,6 @@ import { useSafeState } from 'ahooks';
 import moment from 'moment';
 import { CurrentOrgInterface } from '@/utils/types';
 
-const prefix = 'ms-shiju';
-
 /* 警力总览/值班警力/街面/社会面防控/备勤 */
 export function PoliceStrengthInfoType(props: {topData: any, jgsx: string, currentOrg: CurrentOrgInterface, postTypeId: string}) {
     const {jgsx, currentOrg, postTypeId, topData} = props;

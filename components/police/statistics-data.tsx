@@ -1,7 +1,4 @@
 import Image from 'next/image';
-
-const prefix = 'ms-statisticsdata';
-
 export interface StatisticsDataInterface {
     totayCardPeopleNum: number,
     currentCardPeopleNum: number,

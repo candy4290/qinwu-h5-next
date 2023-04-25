@@ -3,7 +3,6 @@ import CanvasLock from "@/components/canvas-lock";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-const prefix = 'ms-lock';
 /* 设置手势密码 */
 export default function Lock() {
     const [type, setType] = useState<1 | 2 | 3>(1); /* 1-第一遍 2-第二遍 3-输入密码 */

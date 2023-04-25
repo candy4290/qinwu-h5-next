@@ -91,3 +91,13 @@ body {
 .org-empty .adm-empty-description {
     margin-top: 8px;
 }
+.fj .adm-tabs-tab-list {
+  padding: 0 0;
+}
+.child-overview-input .adm-input-element {
+  padding: 0 9px 0 32px;
+  height: 36px;
+  background: #F7F8FA;
+  border-radius: 18px;
+  margin-right: 8px;
+}

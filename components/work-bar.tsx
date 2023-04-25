@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-const prefix = 'ms-workbar';
 /* 工作时长统计图 */
 export default function WorkBar(props: {
     title: string,

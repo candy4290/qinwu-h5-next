@@ -10,8 +10,6 @@ import OrgItem from './org-item';
 import _ from 'lodash';
 import Image from 'next/image';
 
-const prefix = 'ms-childoverview';
-
 type OrgTypes = '4' | '2' | '3';
 
 type DynamicTabsInterface = {
@@ -168,16 +166,16 @@ export default function ChildOverview(props: {currentOrg: CurrentOrgInterface}) 
     }, [height])
 
     return (
-        <div className={prefix}>
-            <div className={`${prefix}-top`}>
-                <div className={`${prefix}-top-search`}>
-                    <SearchOutline className='search' />
-                    <CloseCircleOutline className='close' onClick={clear} />
-                    <Input ref={inputRef} onEnterPress={enterPress} placeholder='请输入内容' />
-                    <div onClick={search}>搜索</div>
+        <div>
+            <div className="h-[309px] w-screen bg-[url('/imgs/schedule/bg+圆@2x.png')] bg-cover overflow-hidden">
+                <div className='my-8 mx-4 flex items-center h-9 relative'>
+                    <SearchOutline className='cursor-pointer absolute text-[grey] text-base top-1/2 -translate-y-1/2 left-[14px]' />
+                    <CloseCircleOutline className='cursor-pointer absolute text-[grey] text-base top-1/2 -translate-y-1/2 right-[52px]' onClick={clear} />
+                    <Input className='child-overview-input' ref={inputRef} onEnterPress={enterPress} placeholder='请输入内容' />
+                    <div className='text-white text-base break-keep' onClick={search}>搜索</div>
                 </div>
             </div>
-            <div className={`${prefix}-body`}>
+            <div className='mt-[-208px] pt-6 rounded-t-[40px] bg-[#f9f9f9] min-h-[300px]'>
                 <DynamicTabs data={downDataList} originData={originDownDataList} />
             </div>
         </div>
