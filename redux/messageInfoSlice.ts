@@ -40,7 +40,12 @@ export const getUnReadMsg = createAsyncThunk('unReadMsg', async (p, { getState, 
         }
     });
     const notReadList = JSON.parse(localStorage.getItem('notReadMsgList') || '[]');
-    notReadList.push(...(rsp || []))
+    notReadList.push(...(rsp || []));
+    (notReadList || []).forEach((item: any) => {
+        item.postStartTime = formatDate3(item.postStartTime);
+        item.postEndTime = formatDate3(item.postEndTime);
+        item.pushTime = formatDate3(item.pushTime);
+    })
     localStorage.setItem('notReadMsgList', JSON.stringify(notReadList));
     const notReadNum = notReadList.length || null;
     const r = notReadNum > 99 ? '99+' : notReadNum;

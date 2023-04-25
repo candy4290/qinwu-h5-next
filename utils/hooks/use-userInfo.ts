@@ -42,6 +42,7 @@ export function useUserInfo() {
                 }
             }
         }
-    }, [userInfo, dispatch, pathname, router])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userInfo, dispatch])
     return {tabs, userInfo};
 }
