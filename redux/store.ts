@@ -5,6 +5,7 @@ import userInfo from './userInfoSlice';
 import msgInfo from './messageInfoSlice';
 import scheduleInfo from './scheduleSlice';
 import subscribeInfo from './subscribeSlice';
+import statisticsInfo from './statisticsSlice';
 
 export function makeStore() {
   return configureStore({
@@ -12,7 +13,8 @@ export function makeStore() {
       userInfo,
       msgInfo,
       scheduleInfo,
-      subscribeInfo
+      subscribeInfo,
+      statisticsInfo
     },
   })
 }

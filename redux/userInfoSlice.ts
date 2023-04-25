@@ -111,8 +111,10 @@ export const getUserInfoSlice = createSlice({
         })
             .addCase(getUserInfo.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.data = action.payload;
-                localStorage.setItem('userInfo', JSON.stringify(action.payload || '{}'))
+                if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
+                    state.data = action.payload;
+                    localStorage.setItem('userInfo', JSON.stringify(action.payload || '{}'))
+                }
             })
             .addCase(getUserInfo.rejected, state => {
                 state.isLoading = false;
