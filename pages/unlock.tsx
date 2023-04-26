@@ -51,7 +51,7 @@ export default function Unlock() {
         } else {
             canvasLockRef.current.success();
             localStorage.setItem('guestPsw', 'true');
-            router.push('/home')
+            router.push('/home/schedule')
         }
     }
 
