@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development next dev",
-    "dev:prod": "cross-env NODE_ENV=productionnext dev",
-    "build": "cross-env NODE_ENV=development next build",
-    "build:prod": "cross-env NODE_ENV=productioncross-env NODE_ENV=development next build",
-    "start": "cross-env NODE_ENV=development next start",
-    "start:prod": "cross-env NODE_ENV=productionnext start",
+    "dev": "dotenv -e .env next dev",
+    "dev:prod": "dotenv -e .env.production dev",
+    "build": "dotenv -e .env next build",
+    "build:prod": "dotenv -e .env.production next build",
+    "start": "dotenv -e .env next start",
+    "start:prod": "dotenv -e .env.production start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -21,7 +21,7 @@
     "antd-mobile": "^5.29.1",
     "autoprefixer": "10.4.14",
     "axios": "^1.3.6",
-    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.2.1",
     "echarts": "^5.4.2",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
