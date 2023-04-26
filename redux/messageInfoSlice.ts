@@ -62,12 +62,12 @@ export const getMsgList = createAsyncThunk('msgList', async (p, { getState, disp
     const tempMsgList = JSON.parse(localStorage.getItem('msgList') || '[]');
     const notReadMsgList = JSON.parse(localStorage.getItem('notReadMsgList') || '[]'); /* 未读消息列表 */
     localStorage.removeItem('notReadMsgList'); /* 清除未读消息列表缓存 */
-    const temp = [...tempMsgList, ...notReadMsgList, ...(rsp || [])];
-    temp.forEach((item: any) => {
-        item.postStartTime = formatDate3(item.postStartTime);
-        item.postEndTime = formatDate3(item.postEndTime);
-        item.pushTime = formatDate3(item.pushTime);
-    })
+    const temp = [...tempMsgList, ...[...notReadMsgList, ...(rsp || [])].map((item => ({
+        ...item,
+        postStartTime: formatDate3(item.postStartTime),
+        postEndTime: formatDate3(item.postEndTime),
+        pushTime: formatDate3(item.pushTime)
+    })))];
     if (temp.length > 30) {
         localStorage.setItem('msgList', JSON.stringify(temp.slice(temp.length - 30)))
         return temp.slice(temp.length - 30);
