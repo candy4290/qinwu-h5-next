@@ -11,17 +11,17 @@ axios.defaults.timeout = 60000;
 axios.interceptors.request.use(
   function (config) {
     if (config.method === 'get') {
-        config.paramsSerializer = {
-            serialize: params => {
-              return qs.stringify(params, { arrayFormat: 'repeat' });
-            },
-          };
+      config.paramsSerializer = {
+        serialize: params => {
+          return qs.stringify(params, { arrayFormat: 'repeat' });
+        },
+      };
     }
     if (!config.url?.endsWith('----')) {
       /* 满足xxx不需要取消请求 */
-    //   config.cancelToken = new axios.CancelToken(cancel => {
-    //     (window as any).axiosCancel.push({ cancel });
-    //   });
+      //   config.cancelToken = new axios.CancelToken(cancel => {
+      //     (window as any).axiosCancel.push({ cancel });
+      //   });
     }
     const token = localStorage.getItem('Authorization');
     if (token && config.headers) {

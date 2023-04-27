@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "dev": "dotenv -e .env next dev",
     "dev:prod": "dotenv -e .env.production dev",
     "build": "dotenv -e .env next build",
     "build:prod": "dotenv -e .env.production next build",
     "start": "dotenv -e .env next start",
     "start:prod": "dotenv -e .env.production start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "preCommit": "lint-staged",
+    "prettier:all": "prettier --write ."
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
@@ -38,7 +41,18 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
     "@types/lodash": "^4.14.194",
-    "@types/qs": "^6.9.7"
+    "@types/qs": "^6.9.7",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.2.7"
+  },
+  "lint-staged": {
+    "pages/**/*.tsx": [
+      "prettier --write"
+    ]
   }
 }

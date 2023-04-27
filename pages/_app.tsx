@@ -1,5 +1,5 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import '@/styles/globals.css';
+import type { AppProps } from 'next/app';
 import '@/utils/axios';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
@@ -18,13 +18,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="description" content="mit-frontend" />
         <meta httpEquiv="cache-control" content="no-cache" />
       </Head>
-      <div className={mainPage ? 'h-[calc(100vh-56px)] bg-[#f9f9f9] overflow-y-auto' : 'h-screen'}>
+      <div className={mainPage ? 'h-[calc(100vh-56px)] overflow-y-auto bg-mitWhite' : 'h-screen'}>
         <Component {...pageProps} />
       </div>
-      {
-        mainPage &&
-        <BottomTabs />
-      }
+      {mainPage && <BottomTabs />}
     </Provider>
-  )
+  );
 }
