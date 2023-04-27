@@ -5,7 +5,7 @@ import CircleChart from '@/components/circle-chart';
 import WorkBar from '@/components/work-bar';
 import moment from 'moment';
 import { useSafeState } from 'ahooks';
-import { getUserInfo, userInfoSelector } from '@/redux/userInfoSlice';
+import { userInfoSelector } from '@/redux/userInfoSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Image from 'next/image';
 import { getStaticsMonthInfo, getStaticsPostInfo, statisticsMonthSelector, statisticsPostSelector } from '@/redux/statisticsSlice';
@@ -51,8 +51,8 @@ function Item2(props: {className?: string, src: string,name: string,num1: number
 export default function Statistics() {
     const userInfo = useAppSelector(userInfoSelector);
     const dispatch = useAppDispatch();
-    const [type, setType] = useSafeState<0 | 1>(0);
-
+    const [type, setType] = useSafeState<0 | 1>(0); /* 0-月统计 1-岗位统计 */
+ 
     const [updateTime, setUpdateTime] = useState<string>();
     const dataList = useAppSelector(statisticsMonthSelector);
     const dataList2 = useAppSelector(statisticsPostSelector);
@@ -69,11 +69,15 @@ export default function Statistics() {
                 <span>{'更新时间：' + updateTime}</span>
             }
             onRefresh={async () => {
-                dispatch(getUserInfo());
-                dispatch(getStaticsPostInfo());
-                await dispatch(getStaticsMonthInfo()).then(() => {
-                    setUpdateTime(moment().format('yyyy-MM-DD HH:mm:ss'))
-                });
+                if (type === 0) {
+                    await dispatch(getStaticsMonthInfo()).then(() => {
+                        setUpdateTime(moment().format('yyyy-MM-DD HH:mm:ss'))
+                    });
+                } else {
+                    await dispatch(getStaticsPostInfo()).then(() => {
+                        setUpdateTime(moment().format('yyyy-MM-DD HH:mm:ss'))
+                    });
+                }
             }}
         >
 
@@ -81,7 +85,7 @@ export default function Statistics() {
                     <PoliceInfo info={userInfo} />
                     <div className='h-[1px] w-[calc(100%-26px)] bg-[#fff]/[.16] mx-auto'></div>
                 </div>
-                <div className='mt-[-230px] px-5' style={{ marginTop: userInfo?.ifSecondment === '0' && userInfo?.secondmentOrgName ? -210 : -230 }}>
+                <div className='px-5' style={{ marginTop: userInfo?.ifSecondment === '0' && userInfo?.secondmentOrgName ? -210 : -230 }}>
                     <div className='pt-[18px] px-[22px] pb-4 flex items-center'>
                         <div className={(type === 0 ? 'text-white font-semibold' : 'text-white/[.65] font-normal') + ' text-[18px]' } onClick={() => setType(0)}>月统计</div>
                         <div className='mx-[30px] w-[2px] h-4 bg-[#707070]/[.2]'></div>
@@ -110,8 +114,8 @@ export default function Statistics() {
                                     <Item2 className='flex' src='/imgs/statistics/icon-上月值班天数@2x.png' name='上月值班天数' num1={dataList[1]?.dutyDays} unit='天' />
                                 </div>
                             </div>
-                            <div className='text-center my-3 text-xs text-[#707070] scale-[0.83]'>
-                                备注：括号内数字是所有警员排班、打卡、总工时、值班的平均时间。
+                            <div className='my-3 text-xs text-[#707070]'>
+                                <div className='text-center scale-[0.83] whitespace-nowrap'>备注：括号内数字是所有警员排班、打卡、总工时、值班的平均时间。</div>
                             </div>
                         </>
                     }

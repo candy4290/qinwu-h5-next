@@ -7,8 +7,9 @@ import _ from 'lodash';
 import { useSafeState } from 'ahooks';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import PoliceInfo from '@/components/police-info';
-import { getUserInfo, userInfoSelector } from '@/redux/userInfoSlice';
+import { userInfoSelector } from '@/redux/userInfoSlice';
 import Image from 'next/image';
+import { getScheduleInfo } from '@/redux/scheduleSlice';
 
 /* 排班tab页 */
 export default function Schedule() {
@@ -48,7 +49,7 @@ export default function Schedule() {
                 <span>{'更新时间：' + updateTime}</span>
             }
             onRefresh={async () => {
-                await dispatch(getUserInfo());
+                await dispatch(getScheduleInfo());
                 listRef.current?.scrollTo(0, 0);
                 setUpdateTime(moment().format('yyyy-MM-DD HH:mm:ss'));
             }}
