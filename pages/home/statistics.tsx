@@ -35,7 +35,7 @@ function Item2(props: { className?: string; src: string; name: string; num1: num
   const { className, src, name, num1, unit } = props;
   return (
     <div className={className}>
-      <Image width={56} height={56} alt="" src={src} />
+      <Image width={56} height={56} alt="" src={src} className="h-14 w-14" />
       <div className="ml-[2px] pt-[5px]">
         <div className="text-sm text-mitBlack/[.9]">{name}</div>
         <div className="-mt-1 flex items-center justify-between">

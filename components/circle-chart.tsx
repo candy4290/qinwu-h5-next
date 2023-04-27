@@ -1,12 +1,15 @@
 import * as echarts from 'echarts';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 /* 本月打卡率 */
 export default function CircleChart(props: { percent: number }) {
+  let chartRef = useRef<echarts.EChartsType>();
   useEffect(() => {
     const chartDom = document.getElementById('echartT');
     if (chartDom) {
-      const myChart = echarts.init(chartDom);
+      if (!chartRef.current) {
+        chartRef.current = echarts.init(chartDom)
+      }
       const getfpkszb = [props.percent]; //非贫困生占比
       const getfpkszb1 = [0.01];
       const option = {
@@ -121,7 +124,7 @@ export default function CircleChart(props: { percent: number }) {
           },
         ],
       };
-      option && myChart.setOption(option as any);
+      chartRef.current.setOption(option as any);
     }
   }, [props.percent]);
   return <div id="echartT" className="absolute right-[29px] top-[10px] h-[130px] w-[130px]"></div>;

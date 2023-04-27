@@ -110,7 +110,7 @@ export default function Messages() {
       {msgs.map((item: any) => {
         return <MsgItem key={_.uniqueId()} item={item} />;
       })}
-      {msgs.length === 0 && <Empty image={<Image className="mr-[9px] h-[56px]" src="/imgs/statistics/empty.png" width={65} height={74} alt="" />} description="暂无数据~" />}
+      {msgs.length === 0 && <Empty image={<Image priority src="/imgs/statistics/empty.png" width={65} height={74} alt="" />} description="暂无数据~" />}
       <div className="mb-[30px] text-center text-sm leading-5 text-mitGray">更新时间 {updateTime}</div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { getUnReadMsg } from '@/redux/messageInfoSlice';
-import { getUserInfo, tabsSelector } from '@/redux/userInfoSlice';
+import { getUserInfo } from '@/redux/userInfoSlice';
 import { useAppDispatch } from '@/redux/store';
 import { useAuth } from '@/utils/hooks/use-auth';
 import { useEffect } from 'react';
@@ -12,7 +12,6 @@ import { usePathname } from 'next/navigation';
 /* 进入系统页面后，根据进入方式，获取用户信息；并轮询用户信息 */
 export function useUserInfo() {
   const userInfo = useAppSelector(userInfoSelector);
-  const tabs = useAppSelector(tabsSelector);
   const { setCode, initUserInfo } = useAuth();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -49,5 +48,5 @@ export function useUserInfo() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, dispatch]);
-  return { tabs, userInfo };
+  return userInfo;
 }

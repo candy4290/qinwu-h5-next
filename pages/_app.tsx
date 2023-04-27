@@ -3,13 +3,10 @@ import type { AppProps } from 'next/app';
 import '@/utils/axios';
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
-import { usePathname } from 'next/navigation';
-import BottomTabs from '@/components/bottom-tabs';
 import Head from 'next/head';
+import Layout from '@/components/layout';
 
 export default function App({ Component, pageProps }: AppProps) {
-  const pathname = usePathname();
-  const mainPage = pathname?.startsWith('/home/');
   return (
     <Provider store={store}>
       <Head>
@@ -18,10 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="description" content="mit-frontend" />
         <meta httpEquiv="cache-control" content="no-cache" />
       </Head>
-      <div className={mainPage ? 'h-[calc(100vh-56px)] overflow-y-auto bg-mitWhite' : 'h-screen'}>
+      <Layout>
         <Component {...pageProps} />
-      </div>
-      {mainPage && <BottomTabs />}
+      </Layout>
     </Provider>
   );
 }
