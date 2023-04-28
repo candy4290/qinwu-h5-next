@@ -38,15 +38,15 @@ export default function Police() {
 
   useEffect(() => {
     if (currentOrg?.isZongLan) {
-      const idx = currentOrg?.orgName.indexOf('公安局');
-      const temp = currentOrg?.orgName.slice(idx === -1 ? 0 : idx + 3);
+      const idx = currentOrg?.orgName?.indexOf('公安局');
+      const temp = currentOrg?.orgName?.slice(idx === -1 ? 0 : idx + 3);
       document.title = temp + '下属单位警力总览';
     } else {
       if (currentOrg?.orgAttr + '' === '0') {
         document.title = '市局轻应用';
       } else {
-        const idx = currentOrg?.orgName.indexOf('公安局') || -1;
-        const temp = currentOrg?.orgName.slice(idx === -1 ? 0 : idx + 3);
+        const idx = currentOrg?.orgName?.indexOf('公安局') || -1;
+        const temp = currentOrg?.orgName?.slice(idx === -1 ? 0 : idx + 3);
         document.title = temp || '';
       }
       return () => {
