@@ -39,12 +39,6 @@ export function useUserInfo() {
     /* 用户信息发生变化时，重新获取未读消息; */
     if (userInfo) {
       dispatch(getUnReadMsg());
-      if (userInfo.policeForceManage !== 1) {
-        if (pathname.startsWith('/home/police')) {
-          /* 如果在警力分析页，跳转到排班页 */
-          router.push('/home/schedule');
-        }
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo, dispatch]);

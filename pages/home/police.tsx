@@ -12,6 +12,7 @@ import Shiju from '@/components/police/shiju';
 import { sleep } from 'antd-mobile/es/utils/sleep';
 import { useAppSelector } from '@/redux/store';
 import { userInfoSelector } from '@/redux/userInfoSlice';
+import { useRouter } from 'next/navigation';
 export const CurrentOrgContext = createContext<React.Dispatch<React.SetStateAction<CurrentOrgInterface | undefined>>>(null as any);
 CurrentOrgContext.displayName = 'CurrentOrgContext';
 
@@ -24,6 +25,7 @@ export interface CurrentOrgInterface {
 
 export default function Police() {
   const userInfo = useAppSelector(userInfoSelector);
+  const router = useRouter();
   const [currentOrg, setCurrentOrg] = useSafeState<CurrentOrgInterface>();
   const preUserInfo = usePrevious(userInfo);
   const [updateTime, setUpdateTime] = useSafeState<string>(moment().format('yyyy-MM-DD HH:mm:ss'));
@@ -37,6 +39,10 @@ export default function Police() {
   }
 
   useEffect(() => {
+    if (userInfo?.policeForceManage !== 1) {
+      /* 如果没有警力页的权限，跳转到排班页 */
+      router.push('/home/schedule');
+    }
     if (currentOrg?.isZongLan) {
       const idx = currentOrg?.orgName?.indexOf('公安局');
       const temp = currentOrg?.orgName?.slice(idx === -1 ? 0 : idx + 3);
@@ -53,7 +59,7 @@ export default function Police() {
         document.title = '市局轻应用';
       };
     }
-  }, [currentOrg, userInfo]);
+  }, [currentOrg, userInfo, router]);
 
   useEffect(() => {
     if (userInfo && preUserInfo?.manageUnit !== userInfo?.manageUnit) {
