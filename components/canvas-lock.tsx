@@ -1,25 +1,28 @@
 /* eslint-disable react/display-name */
-import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 export interface CanvasLockProps {
   callBack?: (psw: string) => void;
   style?: React.CSSProperties;
+  initColor?: string, /* 初始状态下的颜色 */
+  successColor?: string, /* 成功的颜色 */
+  errorColor?: string, /* 失败的颜色 */
+  activeColor?: string, /* 选中状态下的颜色 */
+  size?: number, /* 画布大小，长宽一致 */
+  nums?: number, /* 行列数 */
+
 }
 const CanvasLock = forwardRef((props: CanvasLockProps, ref) => {
-  const { callBack, style } = props;
+  const { callBack, style, initColor = '#A6A6A6', successColor='#3a85ff', errorColor='red', activeColor='#C8CED6', size=280, nums=3 } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<any>({
     ctx: null,
-    width: 0,
-    height: 0,
     devicePixelRatio: 0,
-    type: 3 /* 行列数 */,
-    r: '', // 公式计算
-    point: [],
+    r: '', // 圆圈半径
+    point: [], // 连线经过的点位
     arr: [], // 原始点位
-    restPoint: [],
+    restPoint: [], // 连线还未经过的点位
     canvas: '',
-    tip: '',
     touchFlag: false,
   });
   useImperativeHandle(ref, () => ({
@@ -50,19 +53,22 @@ const CanvasLock = forwardRef((props: CanvasLockProps, ref) => {
   }
 
   function initDom() {
-    ctxRef.current.type = Number(ctxRef.current.type) || 3;
-    ctxRef.current.devicePixelRatio = window.devicePixelRatio || 1;
+    // window.navigator.userAgent.match(/iphone/gi)
+    if (window.devicePixelRatio > 2) { // 3倍屏也采用2倍屏方案；参考：https://github.com/amfe/lib-flexible/blob/master/src/flexible.js
+      ctxRef.current.devicePixelRatio = 2
+    } else {
+      ctxRef.current.devicePixelRatio = window.devicePixelRatio || 1;
+    }
     const canvas = canvasRef.current;
-    const width = ctxRef.current.width || 320;
-    const height = ctxRef.current.height || 320;
+    const width = size || 280;
+    const height = size || 280;
 
-    // 高清屏缩放
+    // 设置画笔+画纸大小
     if (canvas) {
       /* 画布大小 */
       canvas.style.width = width + 'px';
       canvas.style.height = height + 'px';
-
-      /* 画纸大小 */
+      /* 画纸大小：解决多倍屏模糊问题 */
       canvas.height = height * ctxRef.current.devicePixelRatio;
       canvas.width = width * ctxRef.current.devicePixelRatio;
     }
@@ -70,27 +76,29 @@ const CanvasLock = forwardRef((props: CanvasLockProps, ref) => {
 
   function createCircle() {
     /* 创建解锁点的坐标，根据canvas的大小来平均分配半径 */
-    const n = ctxRef.current.type;
     let count = 0;
-    ctxRef.current.r = ctxRef.current.ctx.canvas.width / (2 + 4 * n);
+    ctxRef.current.r = ctxRef.current.ctx.canvas.width / (4 * nums);
     ctxRef.current.point = [];
     ctxRef.current.arr = [];
     ctxRef.current.restPoint = [];
     const r = ctxRef.current.r;
-    for (let i = 0; i < n; i++) {
-      for (let j = 0; j < n; j++) {
+    for (let i = 0; i < nums; i++) {
+      for (let j = 0; j < nums; j++) {
         count++;
         const obj = {
-          x: j * 4 * r + 3 * r,
-          y: i * 4 * r + 3 * r,
+          x: r * (2+4*j),
+          y: r * (2+4*i),
           index: count,
         };
         ctxRef.current.arr.push(obj);
         ctxRef.current.restPoint.push(obj);
       }
     }
-    ctxRef.current.ctx.clearRect(0, 0, ctxRef.current.ctx.canvas.width, ctxRef.current.ctx.canvas.height);
+    clearRect();
+  }
 
+  function clearRect() {
+    ctxRef.current.ctx.clearRect(0, 0, ctxRef.current.ctx.canvas.width, ctxRef.current.ctx.canvas.height);
     for (let i = 0; i < ctxRef.current.arr.length; i++) {
       drawCle(ctxRef.current.arr[i].x, ctxRef.current.arr[i].y);
     }
@@ -98,10 +106,10 @@ const CanvasLock = forwardRef((props: CanvasLockProps, ref) => {
 
   function drawCle(x: number, y: number) {
     /* 初始化解锁密码画板 小圆圈 */
-    ctxRef.current.ctx.strokeStyle = '#A6A6A6';
-    ctxRef.current.ctx.lineWidth = 2;
+    ctxRef.current.ctx.strokeStyle = initColor;
+    ctxRef.current.ctx.lineWidth = 2*ctxRef.current.devicePixelRatio;
     ctxRef.current.ctx.beginPath();
-    ctxRef.current.ctx.arc(x, y, ctxRef.current.r, 0, Math.PI * 2, true);
+    ctxRef.current.ctx.arc(x, y, ctxRef.current.r, 0, Math.PI * 2);
     ctxRef.current.ctx.closePath();
     ctxRef.current.ctx.stroke();
   }
@@ -164,12 +172,13 @@ const CanvasLock = forwardRef((props: CanvasLockProps, ref) => {
     return po;
   }
 
+  /* 绘制当前连线中的点 */
   function drawPoint(style: any) {
     /* 初始化圆心 */
     for (let i = 0; i < ctxRef.current.point.length; i++) {
       ctxRef.current.ctx.fillStyle = style;
       ctxRef.current.ctx.beginPath();
-      ctxRef.current.ctx.arc(ctxRef.current.point[i].x, ctxRef.current.point[i].y, ctxRef.current.r / 2.5, 0, Math.PI * 2, true);
+      ctxRef.current.ctx.arc(ctxRef.current.point[i].x, ctxRef.current.point[i].y, ctxRef.current.r / 2.5, 0, Math.PI * 2);
       ctxRef.current.ctx.closePath();
       ctxRef.current.ctx.fill();
     }
@@ -177,30 +186,27 @@ const CanvasLock = forwardRef((props: CanvasLockProps, ref) => {
 
   function update(po: { x: number; y: number }) {
     /* 核心变换方法在touchMove时候调用 */
-    ctxRef.current.ctx.clearRect(0, 0, ctxRef.current.ctx.canvas.width, ctxRef.current.ctx.canvas.height);
-    for (let i = 0; i < ctxRef.current.arr.length; i++) {
-      drawCle(ctxRef.current.arr[i].x, ctxRef.current.arr[i].y);
-    }
-    drawPoint('#C8CED6');
-    drawStatusPoint('#C8CED6');
-    drawLine('#C8CED6', po);
-
+    clearRect();
     for (let i = 0; i < ctxRef.current.restPoint.length; i++) {
       if (Math.abs(po.x - ctxRef.current.restPoint[i].x) < ctxRef.current.r && Math.abs(po.y - ctxRef.current.restPoint[i].y) < ctxRef.current.r) {
-        // drawPoint(ctxRef.current.restPoint[i].x, ctxRef.current.restPoint[i].y);
         ctxRef.current.point.push(ctxRef.current.restPoint[i]);
         ctxRef.current.restPoint.splice(i, 1);
         break;
       }
     }
+    drawPoint(activeColor);
+    drawStatusPoint(activeColor);
+    drawLine(activeColor, po);
   }
 
+  /* 绘制当前连线中点的圈 */
   function drawStatusPoint(type: any) {
     /* 初始化线条状态 */
     for (let i = 0; i < ctxRef.current.point.length; i++) {
       ctxRef.current.ctx.strokeStyle = type;
+      ctxRef.current.ctx.lineWidth = 2*ctxRef.current.devicePixelRatio;
       ctxRef.current.ctx.beginPath();
-      ctxRef.current.ctx.arc(ctxRef.current.point[i].x, ctxRef.current.point[i].y, ctxRef.current.r, 0, Math.PI * 2, true);
+      ctxRef.current.ctx.arc(ctxRef.current.point[i].x, ctxRef.current.point[i].y, ctxRef.current.r, 0, Math.PI * 2);
       ctxRef.current.ctx.closePath();
       ctxRef.current.ctx.stroke();
     }
@@ -210,7 +216,7 @@ const CanvasLock = forwardRef((props: CanvasLockProps, ref) => {
     /* 解锁轨迹 */
     ctxRef.current.ctx.beginPath();
     ctxRef.current.ctx.strokeStyle = style;
-    ctxRef.current.ctx.lineWidth = 3;
+    ctxRef.current.ctx.lineWidth = 3 * ctxRef.current.devicePixelRatio;
     ctxRef.current.ctx.moveTo(ctxRef.current.point[0].x, ctxRef.current.point[0].y);
 
     for (let i = 1; i < ctxRef.current.point.length; i++) {
@@ -228,16 +234,18 @@ const CanvasLock = forwardRef((props: CanvasLockProps, ref) => {
 
   /* 绘制成功效果色 */
   function success() {
-    drawStatusPoint('#3a85ff');
-    drawPoint('#3a85ff');
-    drawLine('#3a85ff', ctxRef.current.point[ctxRef.current.point.length - 1]);
+    clearRect();
+    drawStatusPoint(successColor);
+    drawPoint(successColor);
+    drawLine(successColor, ctxRef.current.point[ctxRef.current.point.length - 1]);
   }
 
   /* 绘制失败效果色 */
   function error() {
-    drawStatusPoint('red');
-    drawPoint('red');
-    drawLine('red', ctxRef.current.point[ctxRef.current.point.length - 1]);
+    clearRect();
+    drawStatusPoint(errorColor);
+    drawPoint(errorColor);
+    drawLine(errorColor, ctxRef.current.point[ctxRef.current.point.length - 1]);
   }
 
   return <canvas ref={canvasRef} style={style}></canvas>;
